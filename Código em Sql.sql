@@ -1,45 +1,45 @@
-CREATE DATABASE Camera;
+create database Camera;
 
 -- Tabela de Câmera
-CREATE TABLE Camera (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    localizacao VARCHAR(100) NOT NULL,
-    status ENUM('ATIVA', 'INATIVA') NOT NULL DEFAULT 'ATIVA',
-    enderecoMAC VARCHAR(17) UNIQUE NOT NULL
+create table Camera (
+    id INT AUTO_INCREMENT primary key,
+    nome VARCHAR(100) not null,
+    localizacao VARCHAR(100) not null,
+    status ENUM('ATIVA', 'INATIVA') not null default 'ATIVA',
+    enderecoMAC VARCHAR(17) unique no null
 );
 
 -- Tabela de Capturas de Imagem
-CREATE TABLE Captura (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    camera_id INT NOT NULL,
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+create table Captura (
+    id INT AUTO_INCREMENT primary key,
+    camera_id INT not null,
+    timestamp TIMESTAMP default current_timestamp,
     urlImagem VARCHAR(255),
-    statusProcesso ENUM('PENDENTE', 'PROCESSADO', 'ERRO') DEFAULT 'PENDENTE',
-    FOREIGN KEY (camera_id) REFERENCES Camera(id) ON DELETE CASCADE
+    statusProcesso ENUM('PENDENTE', 'PROCESSADO', 'ERRO') default 'PENDENTE',
+    foreign key (camera_id) references Camera(id) on delete cascade
 );
 
 -- Tabela de Processamento de Imagem (ProcessamentoIA)
-CREATE TABLE ProcessamentoIA (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    captura_id INT NOT NULL,
+create table ProcessamentoIA (
+    id INT AUTO_INCREMENT primary key,
+    captura_id INT not null,
     resultadoAnalise TEXT,
-    dataAnalise TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (captura_id) REFERENCES Captura(id) ON DELETE CASCADE
+    dataAnalise TIMESTAMP default current_timestamp,
+    foreign key (captura_id) references Captura(id) on delete cascade
 );
 
 -- Tabela de Log de Auditoria e Feedback Auditivo
-CREATE TABLE LogAuditoria (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+create table LogAuditoria (
+    id INT AUTO_INCREMENT primary key,
     camera_id INT,
     tipoEvento ENUM('CONEXAO_ESTABELECIDA', 'ERRO_CONEXAO', 'IMAGEM_CAPTURADA', 'PROCESSAMENTO_CONCLUIDO', 'ERRO_PROCESSAMENTO', 'RESULTADO_DISPONIVEL') NOT NULL,
     mensagem VARCHAR(255),
-    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (camera_id) REFERENCES Camera(id) ON DELETE SET NULL
+    timestamp TIMESTAMP default current_timestamp,
+    foreign key (camera_id) references Camera(id) on delete cascade
 );
 
 -- Inserindo uma câmera
-INSERT INTO Camera (nome, localizacao, enderecoMAC) 
+insert into Camera (nome, localizacao, enderecoMAC) 
 VALUES ('Camera 1', 'Entrada Principal', '00:1A:7D:DA:71:13');
 
 -- Registrando uma captura de imagem
